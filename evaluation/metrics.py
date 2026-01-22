@@ -1,41 +1,32 @@
-import numpy as np
-
-from sklearn.model_selection import GroupKFold, cross_val_score
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
 
 
-def evaluate_on_test(y_true, y_pred) -> dict:
-    """
-    Compute test-set evaluation metrics.
-    """
+"""
+metrics.py
+==========
+
+Moduł pomocniczy zawierający funkcje do ewaluacji wytrenowanych modeli
+klasyfikacyjnych na zbiorze testowym.
+
+Celem modułu jest:
+- ujednolicenie sposobu obliczania metryk jakości,
+- zapewnienie czytelnego i powtarzalnego interfejsu ewaluacji modeli,
+- uproszczenie kodu głównego (train.py, test_evaluation.py).
+
+Ewaluacja oparta jest o klasyczne metryki stosowane w problemach
+klasyfikacji z niezrównoważonymi klasami:
+- macro-F1,
+- accuracy,
+- macierz pomyłek.
+"""
+
+from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
+
+
+def evaluate_model(model, X_test, y_test):
+    y_pred = model.predict(X_test)
+
     return {
-        "report": classification_report(y_true, y_pred, digits=3),
-        "confusion_matrix": confusion_matrix(y_true, y_pred),
-        "macro_f1": f1_score(y_true, y_pred, average="macro"),
+        "macro_f1": f1_score(y_test, y_pred, average="macro"),
+        "accuracy": accuracy_score(y_test, y_pred),
+        "confusion_matrix": confusion_matrix(y_test, y_pred)
     }
-
-
-def cross_validate_macro_f1(
-    model,
-    X,
-    y,
-    groups,
-    n_splits: int = 5,
-) -> float:
-    """
-    Perform GroupKFold cross-validation using macro-F1 score.
-    """
-    cv = GroupKFold(n_splits=n_splits)
-
-    scores = cross_val_score(
-        model,
-        X,
-        y,
-        cv=cv,
-        groups=groups,
-        scoring="f1_macro",
-        n_jobs=-1,
-    )
-
-    return float(np.mean(scores))
-
