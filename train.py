@@ -27,8 +27,6 @@ pełną kontrolę nad poprawnością walidacji, izolacją zbioru testowego
 oraz wykrywaniem potencjalnego przecieku informacji (data leakage).
 """
 
-
-
 from utils.io import load_and_prepare
 from preprocessing.segment_window import add_window_index_and_align
 from utils.validation import check_target_distribution
@@ -48,7 +46,6 @@ from models.rf_stage1 import (
     fit_stage1_full_and_predict
 )
 
- 
 path_filt = r"data\features_5s_windows_filtered_binary_problem.csv"
 path_raw = r"data\features_5s_windows_not_filtered_binary_problem.csv"
 
@@ -57,12 +54,10 @@ df_filt = load_and_prepare(path_filt)
 
 df_raw, df_filt = add_window_index_and_align(df_raw, df_filt)
 
-
 y = df_raw["target"].astype(int)
 groups = df_raw["subject"]
 
 check_target_distribution(y)
-
 
 
 train_idx, test_idx = subject_stratified_train_test_split(df_raw, y)
@@ -84,11 +79,6 @@ X_filt_test  = data["X_filt_test"]
 y_train      = data["y_train"]
 y_test       = data["y_test"]
 groups_train = data["groups_train"]
-
-
-
-
-
 
 
 rf_stage1 = build_rf_stage1()
@@ -117,8 +107,6 @@ proba_train, proba_test = build_stage1_feature(
 )
 
 
-
-
 X_stage2_train, X_stage2_test = build_stage2_input(
     X_filt_train,
     X_filt_test,
@@ -127,7 +115,6 @@ X_stage2_train, X_stage2_test = build_stage2_input(
 )
 
 models = get_stage2_models()
-
 
 
 print("\n===== CV STAGE 2 =====")
@@ -212,24 +199,26 @@ from evaluation.feature_importance import (
 )
 
 
-# RF single-stage (RAW)
+# =========================
+# FEATURE IMPORTANCE
+# =========================
+
+print("\n===== FEATURE IMPORTANCE: RF SINGLE-STAGE (RAW) =====")
 fi_rf_single = rf_single_stage_importance(X_raw_train, y_train)
-print(fi_rf_single.head(15))
+print(fi_rf_single.head(15).to_string(index=False))
 
-# RF stage 2
+
+print("\n===== FEATURE IMPORTANCE: RF STAGE 2 (FILT + STAGE1) =====")
 fi_rf_stage2 = rf_stage2_importance(X_stage2_train, y_train)
-print(fi_rf_stage2.head(10))
+print(fi_rf_stage2.head(10).to_string(index=False))
 
-# LogReg stage 2
+
+print("\n===== FEATURE IMPORTANCE: LOGISTIC REGRESSION STAGE 2 =====")
 fi_logreg = logreg_stage2_importance(X_stage2_train, y_train)
-print(fi_logreg.head(10))
+print(fi_logreg.head(10).to_string(index=False))
 
-# AdaBoost stage 2
+
+print("\n===== FEATURE IMPORTANCE: ADABOOST STAGE 2 =====")
 fi_adaboost = adaboost_stage2_importance(X_stage2_train, y_train)
-print(fi_adaboost.head(15))
+print(fi_adaboost.head(15).to_string(index=False))
 
-plot_top_features(
-    fi_adaboost,
-    title="Najważniejsze cechy — AdaBoost (Stage 2)",
-    xlabel="Ważność cechy"
-)

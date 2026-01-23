@@ -7,7 +7,7 @@ w procesie uczenia modeli klasyfikacyjnych ryzyka wystąpienia
 choroby kosmicznej (Space Motion Sickness, SMS).
 
 Działanie skryptu obejmuje następujące etapy:
-1. Wczytanie surowych plików IMU (CUT) zawierających sygnały
+1. Wczytanie surowych plików IMU  zawierających sygnały
    prędkości kątowej żyroskopu w osiach X, Y oraz Z.
 2. Segmentację sygnałów na okna czasowe o długości 5 sekund
    bez nakładania.
@@ -24,6 +24,7 @@ i jest wykorzystywany zarówno dla danych nieprzefiltrowanych,
 jak i przefiltrowanych w kolejnych wariantach eksperymentów.
 """
 
+print(">>> FILE LOADED <<<")
 
 # ================== IMPORTY STANDARDOWE ==================
 import os
@@ -42,15 +43,22 @@ from feature_extraction.features import (
 )
 
 # ================== KONFIGURACJA ==================
-FOLDER_DANYCH = r".../2. cut_to_same_length"
-PLIK_TARGETY = r".../cechyOstatecznedlaCalychPomiarow.csv"
+# odkomentuj jedną z opcji
+
+# dla cech filtrowanych
+FOLDER_DANYCH = r"data/cut_filtered"
+PLIK_TARGETY = r"data/ankieta_score_and_target_filtered.csv"
+
+# # #dla cech niefiltrowanych
+# FOLDER_DANYCH = r"data/cut_to_same_length"
+# PLIK_TARGETY = r"data/ankieta_score_and_target.csv"
 
 FS = 100                  # Hz
 WINDOW_SEC = 5            # sekundy
 WINDOW = FS * WINDOW_SEC
 OVERLAP = 0               # brak nakładania
 
-WYJSCIE = "features_5s_windows_not_filtered_binary_problem.csv"
+WYJSCIE = "TESTfeatures_5s_windows_not_filtered_binary_problemTEST.csv"
 
 APPLY_LOG = True
 LOG_COLS = ["x_energy", "y_energy", "z_energy", "mag_energy"]

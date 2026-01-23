@@ -27,8 +27,8 @@ import pandas as pd
 from preprocessing.butterworth_filter import filter_gyro_dataframe
 
 
-input_folder = "data/raw_cut"
-output_folder = "data/filtered"
+input_folder = "data/cut_to_same_length"
+output_folder = "data/cut_filtered"
 
 os.makedirs(output_folder, exist_ok=True)
 
