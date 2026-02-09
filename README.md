@@ -8,16 +8,17 @@ Space Motion Sickness (SMS) is a common issue during spaceflight and simulator-b
 The goal of this project is to assess the risk of SMS using head movement data acquired from IMU sensors and to evaluate the effectiveness of classical machine learning models for this task.
 
 ## Project Structure
-data/ # IMU datasets (not included / anonymized)
-preprocessing/ # Signal preprocessing (filtering, segmentation)
-feature_extraction/ # Feature extraction from IMU signals
-models/ # ML model definitions
-evaluation/ # Model evaluation and metrics
-experiments/ # Experimental setups and comparisons
-utils/ # Shared utility functions
-scripts/ # Helper scripts
-train.py # Main training pipeline
-requirements.txt # Python dependencies
+data/                  # IMU datasets (not included / anonymized)
+preprocessing/         # Signal preprocessing (filtering, segmentation)
+feature_extraction/    # Feature extraction from IMU signals
+models/                # ML model definitions
+evaluation/            # Model evaluation and metrics
+experiments/           # Experimental setups and comparisons
+utils/                 # Shared utility functions
+scripts/               # Helper scripts
+train.py               # Main training pipeline
+requirements.txt       # Python dependencies
+
 
 ## Methods & Technologies
 - **Programming language:** Python  
@@ -38,4 +39,5 @@ requirements.txt # Python dependencies
 ```bash
 pip install -r requirements.txt
 python train.py
+
 
