@@ -19,14 +19,14 @@ scripts/ # Helper scripts
 train.py # Main training pipeline
 requirements.txt # Python dependencies
 
-## ⚙️ Methods & Technologies
+## Methods & Technologies
 - **Programming language:** Python  
 - **Libraries:** NumPy, Pandas, SciPy, scikit-learn  
 - **Signal processing:** filtering, windowing, feature extraction  
 - **Machine learning:** Random Forest, SVM, Logistic Regression  
 - **Evaluation:** cross-validation, classification metrics  
 
-## 🔁 ML Pipeline Overview
+## ML Pipeline Overview
 1. Data preprocessing (filtering, segmentation into time windows)
 2. Feature extraction from IMU signals
 3. Model training using classical ML algorithms
@@ -34,7 +34,8 @@ requirements.txt # Python dependencies
 5. Experimental analysis
 
 
-## 🚀 How to Run
+## How to Run
 ```bash
 pip install -r requirements.txt
 python train.py
+
