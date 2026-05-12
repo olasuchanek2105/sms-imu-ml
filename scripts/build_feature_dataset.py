@@ -61,6 +61,7 @@ LOG_COLS = ["x_energy", "y_energy", "z_energy", "mag_energy"]
 
 # ================== GŁÓWNY PRZEPŁYW ==================
 def main():
+    """Build the configured feature dataset from all source CSV files."""
     targets_df = read_targets(PLIK_TARGETY)
     validate_targets(targets_df)
 
@@ -90,11 +91,13 @@ def main():
 
 
 def validate_targets(targets_df):
+    """Validate that the target table has required label columns."""
     if "target" not in targets_df.columns or "ankieta_score" not in targets_df.columns:
         raise ValueError(f"Brak kolumn 'target' lub 'ankieta_score' w {PLIK_TARGETY}. Mam: {list(targets_df.columns)}")
 
 
 def build_file_target_map(targets_df):
+    """Create a filename-to-target lookup from the target table."""
     file2target = {}
     for _, row in targets_df.iterrows():
         fname = str(row["file"]).strip()
@@ -109,6 +112,7 @@ def build_file_target_map(targets_df):
 
 
 def print_known_inputs(file2target, folder_path):
+    """Print target filenames and available CSV files for debugging."""
     print("\n=== ZAWARTOŚĆ KOLUMN 'file' Z CSV (PO POPRAWCE) ===")
     for k in file2target.keys():
         print(repr(k))
@@ -120,10 +124,12 @@ def print_known_inputs(file2target, folder_path):
 
 
 def get_window_step(window, overlap):
+    """Return the sample step used to move between consecutive windows."""
     return window - overlap if window - overlap > 0 else window
 
 
 def find_target_match(filename, file2target):
+    """Find a target entry matching a CSV filename case-insensitively."""
     for k in file2target.keys():
         if k.lower().replace(".csv", "") == filename.lower().replace(".csv", ""):
             return k
@@ -131,6 +137,7 @@ def find_target_match(filename, file2target):
 
 
 def process_file(filename, file2target, step):
+    """Read one IMU file and return extracted feature rows with status."""
     print("Przetwarzam:", filename)
 
     match = find_target_match(filename, file2target)
@@ -192,6 +199,7 @@ def process_file(filename, file2target, step):
 
 
 def build_feature_rows(filename, x_sig, y_sig, z_sig, target_info, step):
+    """Slice signals into windows and build feature rows with labels."""
     rows = []
     start = 0
 
@@ -214,6 +222,7 @@ def build_feature_rows(filename, x_sig, y_sig, z_sig, target_info, step):
 
 
 def extract_window_features(filename, xw, yw, zw):
+    """Extract time-domain and spectral features for one signal window."""
     mag = np.sqrt(xw**2 + yw**2 + zw**2)
     x_peaks, _ = find_peaks(xw)
     y_peaks, _ = find_peaks(yw)
@@ -251,6 +260,7 @@ def extract_window_features(filename, xw, yw, zw):
 
 
 def apply_log_transform(row):
+    """Apply the configured log transform to selected energy features."""
     if not APPLY_LOG:
         return
 
@@ -261,6 +271,7 @@ def apply_log_transform(row):
 
 
 def save_dataset(all_rows, counters):
+    """Write the feature dataset and print a processing summary."""
     big_df = pd.DataFrame(all_rows)
     big_df.to_csv(WYJSCIE, index=False, sep=';')
     print(f"\nZapisano {len(big_df)} wierszy do {WYJSCIE}")

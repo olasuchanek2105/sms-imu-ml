@@ -20,6 +20,7 @@ odporność pipeline’u na różnice w strukturze danych wejściowych.
 
 
 def normalize(name: str) -> str:
+    """Normalize a column name for robust alias matching."""
     return name.replace('\ufeff', '').strip().lower()
 
 

@@ -10,14 +10,17 @@ from sklearn.metrics import f1_score, accuracy_score
 # =========================
 class IMUDataset(Dataset):
     def __init__(self, X, y):
+        """Store IMU windows as channel-first tensors with labels."""
         # X: (N, 500, 4) -> (N, 4, 500)
         self.X = torch.tensor(np.transpose(X, (0, 2, 1)), dtype=torch.float32)
         self.y = torch.tensor(y, dtype=torch.long)
 
     def __len__(self):
+        """Return the number of labeled windows."""
         return len(self.y)
 
     def __getitem__(self, idx):
+        """Return one IMU window and its label."""
         return self.X[idx], self.y[idx]
 
 
@@ -26,6 +29,7 @@ class IMUDataset(Dataset):
 # =========================
 class SimpleCNN1D(nn.Module):
     def __init__(self, n_classes):
+        """Create a compact 1D CNN classifier for IMU windows."""
         super().__init__()
 
         self.features = nn.Sequential(
@@ -56,6 +60,7 @@ class SimpleCNN1D(nn.Module):
         )
 
     def forward(self, x):
+        """Run a forward pass through feature extractor and classifier."""
         x = self.features(x)
         x = self.classifier(x)
         return x
@@ -65,6 +70,7 @@ class SimpleCNN1D(nn.Module):
 # 3. Train / eval functions
 # =========================
 def train_one_epoch(model, loader, criterion, optimizer, device):
+    """Train the CNN for one epoch and return average loss."""
     model.train()
     total_loss = 0.0
 
@@ -85,6 +91,7 @@ def train_one_epoch(model, loader, criterion, optimizer, device):
 
 @torch.no_grad()
 def evaluate(model, loader, criterion, device):
+    """Evaluate the CNN and return loss, accuracy, and macro-F1."""
     model.eval()
     total_loss = 0.0
     all_preds = []

@@ -25,11 +25,13 @@ rezultatów.
 import numpy as np
 
 def check_target_distribution(y):
+    """Print unique target values and class counts."""
     print("UNIQUE TARGETS:", np.unique(y))
     print("CLASS COUNTS:\n", y.value_counts())
 
 
 def check_oof_vs_full(oof, full_pred, threshold=0.01):
+    """Compare OOF predictions with full-model predictions."""
     diff = np.mean(np.abs(oof - full_pred))
     print("OOF vs FULL diff:", diff)
     assert diff > threshold

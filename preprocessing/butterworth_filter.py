@@ -34,12 +34,14 @@ import pandas as pd
 from scipy.signal import butter, filtfilt, welch
 
 def butter_lowpass(fs, cutoff, order=4):
+    """Design a low-pass Butterworth filter."""
     nyq = 0.5 * fs
     b, a = butter(order, cutoff / nyq, btype="low")
     return b, a
 
 
 def estimate_cutoff_welch(signal, fs, base_cutoff=5.0):
+    """Estimate an adaptive cutoff frequency from the signal spectrum."""
     f, Pxx = welch(signal, fs=fs, nperseg=min(2048, len(signal)))
     cum = np.cumsum(Pxx) / np.sum(Pxx)
     f95 = f[np.searchsorted(cum, 0.95)]
@@ -47,6 +49,7 @@ def estimate_cutoff_welch(signal, fs, base_cutoff=5.0):
 
 
 def filter_gyro_dataframe(df, base_cutoff=5.0, order=4):
+    """Filter gyroscope axes and append filtered columns to a dataframe."""
     time_col = [c for c in df.columns if "time" in c.lower()][0]
     time = df[time_col].to_numpy()
     time = time[~np.isnan(time)]

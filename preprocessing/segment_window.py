@@ -33,6 +33,7 @@ czasowych.
 
 
 def add_window_index_and_align(df_raw, df_filt):
+    """Align RAW and filtered feature windows by file and window index."""
     for df in (df_raw, df_filt):
         df["window_idx"] = df.groupby("file_base").cumcount()
 

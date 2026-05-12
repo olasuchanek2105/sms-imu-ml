@@ -33,6 +33,7 @@ def get_single_stage_models(
     X_filt_test,
     random_state=42
 ):
+    """Create baseline models with their train and test feature matrices."""
     return {
         "RF_single_RAW": (
             RandomForestClassifier(
@@ -63,6 +64,7 @@ def run_single_stage_cv(
     groups_train,
     n_splits=5
 ):
+    """Run grouped cross-validation for all single-stage baselines."""
     results = {}
 
     for name, (model, X_tr, _) in models.items():
@@ -82,6 +84,7 @@ def evaluate_single_stage_on_test(
     y_train,
     y_test
 ):
+    """Fit single-stage baselines and evaluate them on the test split."""
     results = {}
 
     for name, (model, X_tr, X_te) in models.items():

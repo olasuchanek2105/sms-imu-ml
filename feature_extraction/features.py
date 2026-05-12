@@ -24,18 +24,22 @@ from scipy.fft import rfft, rfftfreq
 
 
 def zero_crossings(sig):
+    """Count sign changes in a one-dimensional signal."""
     return ((sig[:-1] * sig[1:]) < 0).sum()
 
 
 def rms(sig):
+    """Calculate root mean square amplitude."""
     return float(np.sqrt(np.mean(sig**2)))
 
 
 def energy(sig):
+    """Calculate signal energy as the sum of squared amplitudes."""
     return float(np.sum(sig**2))
 
 
 def spectral_features(sig, fs):
+    """Calculate spectral entropy, centroid, bandwidth, and dominant frequency."""
     N = len(sig)
     yf = np.abs(rfft(sig))
     xf = rfftfreq(N, 1/fs)

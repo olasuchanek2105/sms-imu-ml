@@ -61,6 +61,7 @@ PATH_RAW = Path("data") / "features_5s_windows_not_filtered_binary_problem.csv"
 
 
 def load_training_data(path_raw=PATH_RAW, path_filt=PATH_FILT):
+    """Load, align, split, and prepare feature matrices for training."""
     df_raw = load_and_prepare(path_raw)
     df_filt = load_and_prepare(path_filt)
     df_raw, df_filt = add_window_index_and_align(df_raw, df_filt)
@@ -83,6 +84,7 @@ def load_training_data(path_raw=PATH_RAW, path_filt=PATH_FILT):
 
 
 def run_stage1(data):
+    """Train the first-stage model and build stacking probabilities."""
     X_raw_train = data["X_raw_train"]
     X_raw_test = data["X_raw_test"]
     y_train = data["y_train"]
@@ -115,6 +117,7 @@ def run_stage1(data):
 
 
 def build_stage2_features(data, proba_train, proba_test):
+    """Combine filtered features with first-stage probability features."""
     X_stage2_train, X_stage2_test = build_stage2_input(
         data["X_filt_train"],
         data["X_filt_test"],
@@ -126,6 +129,7 @@ def build_stage2_features(data, proba_train, proba_test):
 
 
 def print_cv_results(results):
+    """Print cross-validation metrics in a compact format."""
     for name, r in results.items():
         print(
             f"{name}: "
@@ -135,6 +139,7 @@ def print_cv_results(results):
 
 
 def print_test_results(results):
+    """Print final test metrics and confusion matrices."""
     for name, r in results.items():
         print("\n", name)
         print("macro-F1:", r["macro_f1"])
@@ -143,6 +148,7 @@ def print_test_results(results):
 
 
 def run_stage2_evaluation(models, X_stage2_train, X_stage2_test, data):
+    """Run cross-validation and test evaluation for second-stage models."""
     print("\n===== CV STAGE 2 =====")
     cv_results = run_group_cv(
         models,
@@ -164,6 +170,7 @@ def run_stage2_evaluation(models, X_stage2_train, X_stage2_test, data):
 
 
 def run_baseline_evaluation(data):
+    """Run cross-validation and test evaluation for single-stage baselines."""
     print("\n===== CV SINGLE-STAGE (RAW & FILT) =====")
 
     single_stage_models = get_single_stage_models(
@@ -191,6 +198,7 @@ def run_baseline_evaluation(data):
 
 
 def print_feature_importance(data, X_stage2_train):
+    """Print top feature-importance tables for selected models."""
     print("\n===== FEATURE IMPORTANCE: RF SINGLE-STAGE (RAW) =====")
     fi_rf_single = rf_single_stage_importance(data["X_raw_train"], data["y_train"])
     print(fi_rf_single.head(15).to_string(index=False))
@@ -209,6 +217,7 @@ def print_feature_importance(data, X_stage2_train):
 
 
 def main():
+    """Run the full SMS risk prediction training pipeline."""
     data = load_training_data()
     proba_train, proba_test = run_stage1(data)
     X_stage2_train, X_stage2_test = build_stage2_features(data, proba_train, proba_test)

@@ -8,6 +8,7 @@ from models.deep.cnn_model import SimpleCNN1D, IMUDataset, train_one_epoch, eval
 
 
 def main():
+    """Run CNN training and validation on windowed IMU data."""
     # ---- load data ----
     mapping = load_subject_target_mapping("data/ankieta_score_and_target.csv")
 

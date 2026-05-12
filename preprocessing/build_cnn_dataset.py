@@ -9,6 +9,7 @@ def build_cnn_dataset(
     window_size_sec=5,
     fs=100
 ):
+    """Build fixed-length CNN windows, labels, and subject groups."""
     samples_per_window = window_size_sec * fs
 
     windows = []
@@ -87,6 +88,7 @@ def extract_person_id(subject_id: str) -> str:
     return subject_id
 
 def load_subject_target_mapping(target_csv_path):
+    """Load a mapping from recording filename stem to target label."""
     df = pd.read_csv(target_csv_path, sep=";")
     df.columns = df.columns.str.strip()
 

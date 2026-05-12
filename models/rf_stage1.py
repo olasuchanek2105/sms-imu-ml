@@ -35,6 +35,7 @@ from sklearn.model_selection import GroupKFold
 from sklearn.base import clone
 
 def build_rf_stage1(random_state=42):
+    """Create the first-stage Random Forest classifier."""
     return RandomForestClassifier(
         n_estimators=600,
         max_depth=14,

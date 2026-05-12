@@ -8,6 +8,7 @@ def run_model_group_cv(
     groups,
     n_splits=5
 ):
+    """Run grouped cross-validation for one model and return summary metrics."""
     cv = GroupKFold(n_splits=n_splits)
 
     scores_f1 = cross_val_score(
@@ -45,10 +46,7 @@ def run_group_cv(
     groups,
     n_splits=5
 ):
-    """
-    Uruchamia GroupKFold CV dla podanych modeli
-    i zwraca średnie oraz odchylenia metryk.
-    """
+    """Run grouped cross-validation for a dictionary of models."""
     results = {}
 
     for name, model in models.items():

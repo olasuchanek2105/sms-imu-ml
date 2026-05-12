@@ -35,6 +35,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 def build_random_forest(random_state=42):
+    """Create the Random Forest classifier used in stage-two experiments."""
     return RandomForestClassifier(
         n_estimators=600,
         class_weight="balanced",
@@ -44,6 +45,7 @@ def build_random_forest(random_state=42):
 
 
 def build_adaboost(random_state=42, max_depth=2):
+    """Create the AdaBoost classifier with a configurable tree depth."""
     return AdaBoostClassifier(
         estimator=DecisionTreeClassifier(max_depth=max_depth),
         n_estimators=200,
@@ -53,6 +55,7 @@ def build_adaboost(random_state=42, max_depth=2):
 
 
 def build_logistic_regression():
+    """Create the scaled logistic regression pipeline."""
     return make_pipeline(
         StandardScaler(),
         LogisticRegression(
@@ -64,6 +67,7 @@ def build_logistic_regression():
 
 
 def get_stage2_models(random_state=42):
+    """Return all stage-two classifiers keyed by display name."""
     return {
         "RandomForest": build_random_forest(random_state=random_state),
         "AdaBoost": build_adaboost(random_state=random_state),

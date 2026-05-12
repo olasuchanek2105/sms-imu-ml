@@ -32,6 +32,7 @@ za poprawne i spójne przygotowanie danych wejściowych.
 
 
 def load_and_prepare(path):
+    """Load feature CSV data and add subject/file alignment columns."""
     df = pd.read_csv(path, sep=';')
 
     for col in df.columns:
@@ -62,6 +63,7 @@ def load_and_prepare(path):
 
 
 def _convert_numeric_when_possible(series):
+    """Convert a series to numeric only when no non-null values are lost."""
     converted = pd.to_numeric(series, errors="coerce")
     if converted.notna().sum() == series.notna().sum():
         return converted
