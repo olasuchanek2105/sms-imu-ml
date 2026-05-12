@@ -22,11 +22,14 @@ klasyfikacji z niezrównoważonymi klasami:
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
 
 
+def evaluate_predictions(y_true, y_pred):
+    return {
+        "macro_f1": f1_score(y_true, y_pred, average="macro"),
+        "accuracy": accuracy_score(y_true, y_pred),
+        "confusion_matrix": confusion_matrix(y_true, y_pred)
+    }
+
+
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
-
-    return {
-        "macro_f1": f1_score(y_test, y_pred, average="macro"),
-        "accuracy": accuracy_score(y_test, y_pred),
-        "confusion_matrix": confusion_matrix(y_test, y_pred)
-    }
+    return evaluate_predictions(y_test, y_pred)

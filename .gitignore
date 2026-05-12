@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 
 # Virtual environment
 venv/
@@ -16,5 +17,14 @@ venv/
 data/*
 !data/README.md
 
+# Model artifacts
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
 # OS
 .DS_Store
+Thumbs.db
+*:Zone.Identifier

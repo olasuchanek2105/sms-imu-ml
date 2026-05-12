@@ -19,7 +19,8 @@ Moduł jest używany po zakończeniu:
 - strojenia hiperparametrów.
 """
 
-from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
+from evaluation.metrics import evaluate_model
+
 
 def evaluate_on_test(
     models,
@@ -36,12 +37,6 @@ def evaluate_on_test(
 
     for name, model in models.items():
         model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-
-        results[name] = {
-            "macro_f1": f1_score(y_test, y_pred, average="macro"),
-            "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred),
-        }
+        results[name] = evaluate_model(model, X_test, y_test)
 
     return results

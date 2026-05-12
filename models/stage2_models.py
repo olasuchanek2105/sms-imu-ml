@@ -33,26 +33,39 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
+
+def build_random_forest(random_state=42):
+    return RandomForestClassifier(
+        n_estimators=600,
+        class_weight="balanced",
+        random_state=random_state,
+        n_jobs=-1
+    )
+
+
+def build_adaboost(random_state=42, max_depth=2):
+    return AdaBoostClassifier(
+        estimator=DecisionTreeClassifier(max_depth=max_depth),
+        n_estimators=200,
+        learning_rate=0.7,
+        random_state=random_state
+    )
+
+
+def build_logistic_regression():
+    return make_pipeline(
+        StandardScaler(),
+        LogisticRegression(
+            class_weight="balanced",
+            max_iter=5000,
+            solver="lbfgs"
+        )
+    )
+
+
 def get_stage2_models(random_state=42):
     return {
-        "RandomForest": RandomForestClassifier(
-            n_estimators=600,
-            class_weight="balanced",
-            random_state=random_state,
-            n_jobs=-1
-        ),
-        "AdaBoost": AdaBoostClassifier(
-            estimator=DecisionTreeClassifier(max_depth=2),
-            n_estimators=200,
-            learning_rate=0.7,
-            random_state=random_state
-        ),
-        "LogReg": make_pipeline(
-            StandardScaler(),
-            LogisticRegression(
-                class_weight="balanced",
-                max_iter=5000,
-                solver="lbfgs"
-            )
-        ),
+        "RandomForest": build_random_forest(random_state=random_state),
+        "AdaBoost": build_adaboost(random_state=random_state),
+        "LogReg": build_logistic_regression(),
     }

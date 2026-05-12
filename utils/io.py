@@ -38,7 +38,7 @@ def load_and_prepare(path):
         if df[col].dtype == 'object':
             df[col] = df[col].str.replace(',', '.', regex=False)
 
-    df = df.apply(pd.to_numeric, errors='ignore')
+    df = df.apply(_convert_numeric_when_possible)
 
     df["subject"] = (
         df["file"]
@@ -59,6 +59,13 @@ def load_and_prepare(path):
     )
 
     return df
+
+
+def _convert_numeric_when_possible(series):
+    converted = pd.to_numeric(series, errors="coerce")
+    if converted.notna().sum() == series.notna().sum():
+        return converted
+    return series
 
 
 

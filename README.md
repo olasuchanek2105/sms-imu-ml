@@ -13,11 +13,13 @@ data/                  # IMU datasets (not included / anonymized)
 preprocessing/         # Signal preprocessing (filtering, segmentation)
 feature_extraction/    # Feature extraction from IMU signals
 models/                # ML model definitions
+models/deep/           # 1D CNN model components
 evaluation/            # Model evaluation and metrics
 experiments/           # Experimental setups and comparisons
 utils/                 # Shared utility functions
 scripts/               # Helper scripts
 train.py               # Main training pipeline
+train_cnn.py           # CNN training pipeline
 requirements.txt       # Python dependencies
 ```
 
@@ -42,6 +44,4 @@ requirements.txt       # Python dependencies
 ```bash
 pip install -r requirements.txt
 python train.py
-
-
-
+```

@@ -21,8 +21,9 @@ w trybie klasycznej, jednoetapowej klasyfikacji.
 """
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GroupKFold, cross_val_score
-from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
+
+from evaluation.cross_validation import run_model_group_cv
+from evaluation.metrics import evaluate_model
 
 
 def get_single_stage_models(
@@ -62,36 +63,16 @@ def run_single_stage_cv(
     groups_train,
     n_splits=5
 ):
-    cv = GroupKFold(n_splits=n_splits)
     results = {}
 
     for name, (model, X_tr, _) in models.items():
-        scores_f1 = cross_val_score(
+        results[name] = run_model_group_cv(
             model,
             X_tr,
             y_train,
-            cv=cv,
-            groups=groups_train,
-            scoring="f1_macro",
-            n_jobs=-1
+            groups_train,
+            n_splits
         )
-
-        scores_acc = cross_val_score(
-            model,
-            X_tr,
-            y_train,
-            cv=cv,
-            groups=groups_train,
-            scoring="accuracy",
-            n_jobs=-1
-        )
-
-        results[name] = {
-            "f1_mean": scores_f1.mean(),
-            "f1_std": scores_f1.std(),
-            "acc_mean": scores_acc.mean(),
-            "acc_std": scores_acc.std(),
-        }
 
     return results
 
@@ -105,12 +86,6 @@ def evaluate_single_stage_on_test(
 
     for name, (model, X_tr, X_te) in models.items():
         model.fit(X_tr, y_train)
-        y_pred = model.predict(X_te)
-
-        results[name] = {
-            "macro_f1": f1_score(y_test, y_pred, average="macro"),
-            "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred),
-        }
+        results[name] = evaluate_model(model, X_te, y_test)
 
     return results
